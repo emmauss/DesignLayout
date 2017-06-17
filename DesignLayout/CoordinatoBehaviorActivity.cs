@@ -32,7 +32,7 @@ namespace DesignLayout
 			depentent.Click += (object sender, EventArgs e) => {
 				ViewCompat.OffsetTopAndBottom (depentent, 5);
 			};
-			//使用代码关联Behavior
+			
 //			var child = (TextView)FindViewById (Resource.Id.child);
 //			CoordinatorLayout.LayoutParams _params =
 //				(CoordinatorLayout.LayoutParams)child.LayoutParameters;

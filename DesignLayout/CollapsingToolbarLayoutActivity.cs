@@ -27,19 +27,36 @@ namespace DesignLayout
 			SetContentView (Resource.Layout.activity_collapsingtoolbarlayout);
 			// Create your application here
 			var toolbar = FindViewById<Android.Support.V7.Widget.Toolbar> (Resource.Id.toolbar);
+            toolbar.SetNavigationIcon(Resource.Drawable.abc_ic_ab_back_mtrl_am_alpha);
+            
 			SetSupportActionBar (toolbar);
 
-			//使用CollapsingToolbarLayout必须把title设置到CollapsingToolbarLayout上，设置到Toolbar上则不会显示  
-			CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout)FindViewById (Resource.Id.collapsing_toolbar_layout);  
+            SupportActionBar.SetDisplayShowHomeEnabled(true);
+            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+
+           
+
+            CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout)FindViewById (Resource.Id.collapsing_toolbar_layout);  
 			collapsingToolbarLayout.Title = "CollapsingTL";  
-			//通过CollapsingToolbarLayout修改字体颜色  
-			//collapsingToolbarLayout.SetExpandedTitleColor();//设置还没收缩时状态下字体颜色  
-			//collapsingToolbarLayout.SetCollapsedTitleTextColor();//设置收缩后Toolbar上字体的颜色  
 
 			var recyclerView = FindViewById<RecyclerView> (Resource.Id.recyclerView);
 			recyclerView.SetAdapter (new CustomAdapter ());
 			recyclerView.SetLayoutManager (new LinearLayoutManager (this));
 		}
-	}
+
+        public override bool OnOptionsItemSelected(Android.Views.IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Android.Resource.Id.Home:
+                    this.OnBackPressed();
+                    break;
+                default:
+                    break;
+            }
+            return base.OnOptionsItemSelected(item);
+        }
+
+    }
 }
 

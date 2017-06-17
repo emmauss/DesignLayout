@@ -17,20 +17,21 @@ namespace DesignLayout
 
 		private DrawerLayout drawerLayout;
 		private NavigationView navigationView;
+        private Android.Support.V7.Widget.Toolbar toolbar;
+        //private Android.Support.V7.Widget.SearchView searchview;
 
-		protected override void OnCreate (Bundle savedInstanceState)
+        protected override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
 
 			// Set our view from the "main" layout resource
 			SetContentView (Resource.Layout.Main);
 
-			var toolbar = FindViewById<Android.Support.V7.Widget.Toolbar> (Resource.Id.toolbar);
+			toolbar = FindViewById<Android.Support.V7.Widget.Toolbar> (Resource.Id.toolbar);
 			toolbar.SetNavigationIcon (Resource.Drawable.ic_menu);
 			SetSupportActionBar (toolbar);
-
-
-			drawerLayout = FindViewById<DrawerLayout> (Resource.Id.drawer_layout);
+            //toolbar.InflateMenu(Resource.Menu.search_menu);
+            drawerLayout = FindViewById<DrawerLayout> (Resource.Id.drawer_layout);
 			navigationView = FindViewById<NavigationView> (Resource.Id.nv_menu);
 			navigationView.NavigationItemSelected += (object sender, NavigationView.NavigationItemSelectedEventArgs e) => {
 				switch (e.MenuItem.ItemId) {
@@ -58,31 +59,66 @@ namespace DesignLayout
 		[Export ("floatingclick")]
 		public void FloatingClick (View view)
 		{
-			System.Console.WriteLine ("FloatingClick");
-			Snackbar.Make (view, "Snackbar 测试用例！", Snackbar.LengthLong).SetAction ("点击", (v) => {
-				Toast.MakeText (this, "别瞎点！", ToastLength.Short).Show ();
-			}).Show ();
+			//add extras menus
 		}
 
 
 		public override bool OnCreateOptionsMenu (Android.Views.IMenu menu)
 		{
-			MenuInflater.Inflate (Resource.Menu.main_menu, menu);
-			return true;
+            
+			this.MenuInflater.Inflate (Resource.Menu.main_menu, menu);
+            
+            /*toolbar.MenuItemClick += (object sender, Android.Support.V7.Widget.Toolbar.MenuItemClickEventArgs e) =>
+            {
+
+            };*/
+            var searchItem = menu.FindItem(Resource.Id.action_search).ActionView;
+            //var test = MenuItemCompat.GetActionView(searchItem);
+            SearchManager searchmanager = (SearchManager)GetSystemService(SearchService);
+          /*  var searchview = searchItem.JavaCast<Android.Widget.SearchView>();
+            
+            searchview.SetSearchableInfo(searchmanager.GetSearchableInfo(this.ComponentName));
+            searchview.SetIconifiedByDefault(true);*/
+            return true;
 		}
 
 		public override bool OnOptionsItemSelected (Android.Views.IMenuItem item)
 		{
 			switch (item.ItemId) {
 			case Android.Resource.Id.Home:
-				drawerLayout.OpenDrawer ((int)GravityCompat.Start);
+				drawerLayout.OpenDrawer (GravityCompat.Start);
 				break;
+                case Resource.Id.action_search:
+
+                    break;
 			default:
 				break;
 			}
 			return base.OnOptionsItemSelected (item);
 		}
-	}
+
+        public class SearchViewExpandListener
+    : Java.Lang.Object, MenuItemCompat.IOnActionExpandListener
+        {
+            private readonly IFilterable _adapter;
+
+            public SearchViewExpandListener(IFilterable adapter)
+            {
+                _adapter = adapter;
+            }
+
+            public bool OnMenuItemActionCollapse(IMenuItem item)
+            {
+                _adapter.Filter.InvokeFilter("");
+                return true;
+            }
+
+            public bool OnMenuItemActionExpand(IMenuItem item)
+            {
+                return true;
+            }
+        }
+    }
 }
 
 

@@ -16,13 +16,12 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|enterAlways" />
+                android:layout_height="?attr/actionBarSize" />
         </android.support.design.widget.AppBarLayout>
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="0dp"
+            android:layout_margin="10dp"
             android:onClick="floatingclick"
             android:layout_gravity="bottom|right"
             android:src="@drawable/ic_dashboard"
